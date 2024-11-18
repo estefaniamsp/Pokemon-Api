@@ -1,0 +1,21 @@
+.search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .error {
+    color: red;
+  }
+  
+  .pokemon-details {
+    margin-top: 20px;
+  }
+  
+  img {
+    max-width: 200px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+  

@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Pokémon List</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<div *ngIf="loadingList">Cargando lista de Pokémon...</div>
+<div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+<div *ngIf="!loadingList && !errorMessage">
+  <h2>Lista de Pokémon</h2>
+  <ul>
+    <li *ngFor="let pokemon of pokemonList">
+      {{ pokemon.name | titlecase }}
+      <button (click)="fetchPokemonDetails(pokemon.name)">Ver detalles</button>
+      <pre>{{ pokemon | json }}</pre>
+    </li>
+  </ul>
+</div>
+
+<div *ngIf="loadingDetails">Cargando detalles...</div>
+
+<div *ngIf="selectedPokemon" class="pokemon-details">
+  <h2>{{ selectedPokemon.name | titlecase }}</h2>
+  <img [src]="selectedPokemon.sprites.front_default" alt="{{ selectedPokemon.name }}" />
+  <p><strong>ID:</strong> {{ selectedPokemon.id }}</p>
+  <p><strong>Altura:</strong> {{ selectedPokemon.height }}</p>
+  <p><strong>Peso:</strong> {{ selectedPokemon.weight }}</p>
+  <div>
+    <strong>Habilidades:</strong>
+    <ul>
+      <li *ngFor="let ability of selectedPokemon.abilities">
+        {{ ability.ability.name }}
+      </li>
+    </ul>
+  </div>
+  <div>
+    <strong>Tipos:</strong>
+    <ul>
+      <li *ngFor="let type of selectedPokemon.types">
+        {{ type.type.name }}
+      </li>
+    </ul>
+  </div>
+</div>
+
+
