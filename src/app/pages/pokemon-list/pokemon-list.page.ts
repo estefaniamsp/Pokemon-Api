@@ -7,51 +7,35 @@ import { PokemonService } from 'src/app/services/pokemon.service';
   styleUrls: ['./pokemon-list.page.scss'],
 })
 export class PokemonListPage implements OnInit {
-  pokemonList: any[] = [];
-  selectedPokemon: any = null;
-  loadingList = false;
-  loadingDetails = false;
+  pokemonName: string = '';
+  pokemonData: any = null;
   loading = false;
   errorMessage: string = '';
 
   constructor(private pokemonService: PokemonService) { }
 
   ngOnInit() {
-    this.fetchPokemons();
+    this.searchPokemon();
   }
 
-  fetchPokemons(limit = 50, offset = 0) {
+  searchPokemon() {
+    if (!this.pokemonName.trim()) {
+      this.errorMessage = 'Por favor, ingresa el nombre de un Pokémon.';
+      return;
+    }
+
     this.loading = true;
     this.errorMessage = '';
+    this.pokemonData = null;
 
-    this.pokemonService.getPokemonListWithPagination(limit, offset).subscribe({
+    this.pokemonService.getPokemons(this.pokemonName.toLowerCase()).subscribe({
       next: (response) => {
-        this.pokemonList = response.results;
+        this.pokemonData = response;
         this.loading = false;
       },
-      error: (error) => {
-        console.error('Error fetching Pokémon list:', error);
-        this.errorMessage = 'No se pudo cargar la lista de Pokémon.';
+      error: () => {
+        this.errorMessage = 'Pokémon no encontrado. Intenta con otro nombre.';
         this.loading = false;
-      },
-    });
-  }
-
-  fetchPokemonDetails(name: string) {
-    this.loadingDetails = true;
-    this.selectedPokemon = null;
-    this.errorMessage = '';
-
-    this.pokemonService.getPokemonDetails(name).subscribe({
-      next: (response) => {
-        console.log('Lista de Pokémon:', response.results);
-        this.selectedPokemon = response;
-        this.loadingDetails = false;
-      },
-      error: (error) => {
-        console.error('Error fetching Pokémon details:', error);
-        this.errorMessage = 'No se pudieron cargar los detalles del Pokémon.';
-        this.loadingDetails = false;
       },
     });
   }
